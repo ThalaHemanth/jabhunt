@@ -36,22 +36,24 @@ export default function MainContextProvider(props) {
     const url = pincode
       ? `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pincode}&date=${today}`
       : `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtID}&date=${today}`;
-    const { data } = await axios.get(url);
-    console.log('FetchByCalender', url);
-    console.log('FetchByCalender', data);
-    await data.centers.map(center => {
-      const disrict = center.district_name;
-      const { pincode } = center;
-      center.sessions.map(session =>
-        arr.push({
-          date: session.date,
-          slots: session.slots.length,
-          place: disrict,
-          districtID,
-          pincode: pincode || null,
-        })
-      );
-    });
+    try {
+      const { data } = await axios.get(url);
+      console.log('FetchByCalender', url);
+      console.log('FetchByCalender', data);
+      await data.centers.map(center => {
+        const disrict = center.district_name;
+        const { pincode } = center;
+        center.sessions.map(session =>
+          arr.push({
+            date: session.date,
+            slots: session.slots.length,
+            place: disrict,
+            districtID,
+            pincode: pincode || null,
+          })
+        );
+      });
+    } catch (e) {}
 
     console.log(arr);
 
@@ -80,9 +82,11 @@ export default function MainContextProvider(props) {
     }
     console.log('PINCODe function working');
     const date = dayjs().format('DD-MM-YYYY');
-    const { data } = await axios.get(
-      `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pin}&date=${date}`
-    );
+    try {
+      const { data } = await axios.get(
+        `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pin}&date=${date}`
+      );
+    } catch (e) {}
     console.log(pin, date);
     console.log(data);
   }
