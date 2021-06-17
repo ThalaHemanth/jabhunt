@@ -19,8 +19,7 @@
     "@ijsto/eslint-config": "^4.1.6",
     "autoprefixer": "^10.0.4",
     "eslint": "^7.25.0",
-    "postcss": "^8.1.10",
+    "postcss": "^8.3.5",
     "tailwindcss": "^2.1.1"
   }
 }
-
