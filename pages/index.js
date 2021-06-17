@@ -15,6 +15,7 @@ import SelectComponent from '../components/Select';
 import SlotCard from '../components/SlotCard';
 import { JabIcon } from '../components/Icons';
 import { useMainContext } from '../context/MainContext';
+import { headers } from '../utils/urlOptions';
 
 const StateSelect = SelectComponent;
 const DistrictSelect = SelectComponent;
@@ -25,10 +26,7 @@ export async function fetchStates() {
     const { data: states } = await axios.get(
       'https://cdn-api.co-vin.in/api/v2/admin/location/states',
       {
-        headers: {
-          'user-agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
-        },
+        headers,
       }
     );
     stateOptions = states?.states.map(state => ({
