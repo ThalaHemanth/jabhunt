@@ -55,10 +55,7 @@ export default function MainContextProvider(props) {
       });
     } catch (e) {}
 
-    console.log(arr);
-
     const uniqueDates = Array.from(new Set(arr.map(d => d.date)));
-    console.log('uniqueDates', uniqueDates);
     uniqueDates.forEach((d, i) => {
       let tempSlots = 0;
       let place;
@@ -71,7 +68,6 @@ export default function MainContextProvider(props) {
         }
       });
       finalArray.push({ date: d, slots: tempSlots, place, pincode });
-      console.log(finalArray);
     });
     setSlots(finalArray);
   };
@@ -96,7 +92,6 @@ export default function MainContextProvider(props) {
       return;
     }
     const ID = id || stateID;
-    console.log(ID);
     try {
       const { data } = await axios.get(
         `https://cdn-api.co-vin.in/api/v2/admin/location/districts/${ID}`,
@@ -112,17 +107,14 @@ export default function MainContextProvider(props) {
         label: district.district_name,
       }));
       await setDistricts(refinedDistricts);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   }
 
   useEffect(() => {
     fetchDistricts(stateID);
   }, [stateID]);
 
-  // useEffect(() => {}, [slots]);
-  //
+  useEffect(() => {}, [slots]);
   useEffect(() => {}, [districts]);
   return (
     <MainContext.Provider

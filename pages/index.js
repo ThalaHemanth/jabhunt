@@ -38,7 +38,7 @@ export async function fetchStates() {
   return stateOptions;
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const states = await fetchStates();
   return {
     props: { states },
@@ -62,6 +62,7 @@ export default function Home({ states }) {
   });
   const [activeSearchInputField, setActiveSearchInputField] = useState('');
   const [pincode, setPincode] = useState(null);
+  const [stateList, setStateList] = useState([]);
   const router = useRouter();
 
   function handleMainButonClick(event) {
@@ -91,6 +92,11 @@ export default function Home({ states }) {
       setDistrictOption(value);
     }
   }
+
+  // useEffect(() => {
+  //   const stateOptions = fetchStates();
+  //   setStateList(stateOptions);
+  // }, []);
 
   useEffect(() => {
     setStateId_fun(stateOption.value);
