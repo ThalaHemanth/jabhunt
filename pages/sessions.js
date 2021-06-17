@@ -7,7 +7,6 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Navbar from '../components/Navbar';
 import { FilterBreadCrumb, SearchInput } from '../components/Common';
-// import { filterOptions } from './slots';
 import SlotCard from '../components/SlotCard';
 
 const filterOptions = [
