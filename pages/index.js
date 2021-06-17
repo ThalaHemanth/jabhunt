@@ -93,10 +93,14 @@ export default function Home({ states }) {
     }
   }
 
-  // useEffect(() => {
-  //   const stateOptions = fetchStates();
-  //   setStateList(stateOptions);
-  // }, []);
+  useEffect(() => {
+    let stateOptions = fetchStates();
+    setStateList(stateOptions);
+    if (stateList.length < 1) {
+      stateOptions = fetchStates();
+      setStateList(stateOptions);
+    }
+  }, []);
 
   useEffect(() => {
     setStateId_fun(stateOption.value);
@@ -141,7 +145,7 @@ export default function Home({ states }) {
               <StateSelect
                 propValue={stateOption}
                 handleChange={value => handleChange(value, 'state')}
-                options={states}
+                options={states || stateList}
                 placeholder="Select State"
               />
             </div>
