@@ -7,8 +7,35 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Navbar from '../components/Navbar';
 import { FilterBreadCrumb, SearchInput } from '../components/Common';
-import { filterOptions } from './slots';
+// import { filterOptions } from './slots';
 import SlotCard from '../components/SlotCard';
+
+const filterOptions = [
+  {
+    type: 'vaccine',
+    placeholder: 'COVAXIN',
+  },
+  {
+    type: 'vaccine',
+    placeholder: 'COVISHIELD',
+  },
+  {
+    type: 'age',
+    placeholder: '45',
+  },
+  {
+    type: 'age',
+    placeholder: '18',
+  },
+  {
+    type: 'fee',
+    placeholder: 'Free',
+  },
+  {
+    type: 'fee',
+    placeholder: 'PAID',
+  },
+];
 
 export default function SessionsPage() {
   const [searchTerm, setSearchTerm] = useState('');
