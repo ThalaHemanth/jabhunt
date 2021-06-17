@@ -92,6 +92,9 @@ export default function MainContextProvider(props) {
   }
 
   async function fetchDistricts(id) {
+    if (!stateID) {
+      return;
+    }
     const ID = id || stateID;
     console.log(ID);
     try {
@@ -118,8 +121,8 @@ export default function MainContextProvider(props) {
     fetchDistricts(stateID);
   }, [stateID]);
 
-  useEffect(() => {}, [slots]);
-
+  // useEffect(() => {}, [slots]);
+  //
   useEffect(() => {}, [districts]);
   return (
     <MainContext.Provider

@@ -20,19 +20,23 @@ const StateSelect = SelectComponent;
 const DistrictSelect = SelectComponent;
 
 export async function fetchStates() {
-  const { data: states } = await axios.get(
-    'https://cdn-api.co-vin.in/api/v2/admin/location/states',
-    {
-      headers: {
-        'user-agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
-      },
-    }
-  );
-  const stateOptions = states?.states.map(state => ({
-    label: state.state_name,
-    value: state.state_id,
-  }));
+  let stateOptions = [];
+  try {
+    const { data: states } = await axios.get(
+      'https://cdn-api.co-vin.in/api/v2/admin/location/states',
+      {
+        headers: {
+          'user-agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
+        },
+      }
+    );
+    stateOptions = states?.states.map(state => ({
+      label: state.state_name,
+      value: state.state_id,
+    }));
+    return stateOptions;
+  } catch (e) {}
   return stateOptions;
 }
 

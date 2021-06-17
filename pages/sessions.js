@@ -181,8 +181,9 @@ export default function SessionsPage() {
           />
         </div>
         <div className="overflow-y-scroll  flex flex-col items-center w-full mx-auto">
-          {sessionData.sessions?.map(session => (
+          {sessionData.sessions?.map((session, i) => (
             <SlotCard
+              key={i + session.center_id}
               name={session.name}
               place={session.district_name}
               fee={session.fee}
