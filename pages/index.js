@@ -81,7 +81,7 @@ export default function Home({ states }) {
     router.push({
       pathname: '/slots',
       query: {
-        states: JSON.stringify(states),
+        states: JSON.stringify(stateList),
       },
     });
   }
