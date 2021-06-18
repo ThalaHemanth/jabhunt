@@ -66,7 +66,7 @@ export default function SessionsPage() {
 
   useEffect(() => {
     fetchData();
-  }, [date, isReady]);
+  }, [date, isReady, sessionDate]);
 
   /*
     Just pass the date as query the continue by manipulating by using dayjs lib
