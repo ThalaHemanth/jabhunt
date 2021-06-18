@@ -24,10 +24,10 @@ export async function fetchStates() {
   let stateOptions = [];
   try {
     const { data: states } = await axios.get(
-      'https://cdn-api.co-vin.in/api/v2/admin/location/states',
-      {
-        headers,
-      }
+      'https://cdn-api.co-vin.in/api/v2/admin/location/states'
+      // {
+      //   headers,
+      // }
     );
     stateOptions = states?.states.map(state => ({
       label: state.state_name,
@@ -35,10 +35,12 @@ export async function fetchStates() {
     }));
     return stateOptions;
   } catch (e) {}
+  console.log('stateoptions function', stateOptions);
   return stateOptions;
 }
 
 export async function getServerSideProps() {
+  console.log('serverside props running');
   const states = await fetchStates();
   return {
     props: { states },
@@ -93,14 +95,34 @@ export default function Home({ states }) {
     }
   }
 
-  useEffect(() => {
-    let stateOptions = fetchStates();
-    setStateList(stateOptions);
-    if (stateList.length < 1) {
-      stateOptions = fetchStates();
+  async function fetchStates() {
+    console.log('Entering fetchstates function');
+    try {
+      const { data: states } = await axios.get(
+        'https://cdn-api.co-vin.in/api/v2/admin/location/states'
+        // {
+        //   headers,
+        // }
+      );
+      console.log('data from fetchstates funcction', states);
+      const stateOptions = states?.states.map(state => ({
+        label: state.state_name,
+        value: state.state_id,
+      }));
       setStateList(stateOptions);
+      console.log('data after setting staeoprions', stateList);
+    } catch (e) {}
+  }
+
+  useEffect(() => {
+    fetchStates();
+    console.log('fetching states from useeffect');
+    if (stateList.length < 1) {
+      console.log('fetching again..');
+      console.log(stateList);
+      fetchStates();
     }
-  }, []);
+  }, [stateList.length]);
 
   useEffect(() => {
     setStateId_fun(stateOption.value);
@@ -109,6 +131,7 @@ export default function Home({ states }) {
       fetchByCalender();
     }
   }, [stateOption, districtOption]);
+  if (!stateList) return <div>Loading...</div>;
   return (
     <div>
       <Head />
@@ -145,7 +168,7 @@ export default function Home({ states }) {
               <StateSelect
                 propValue={stateOption}
                 handleChange={value => handleChange(value, 'state')}
-                options={states || stateList}
+                options={stateList}
                 placeholder="Select State"
               />
             </div>
