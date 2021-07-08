@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Select from 'react-select';
 import SlotsListItem from '../components/SlotsListItem';
 import Navbar from '../components/Navbar';
 import {
@@ -17,41 +18,69 @@ const DistrictSelect = SelectComponent;
 
 function getStaticProps() {}
 
+// export const filterOptions = [
+//   {
+//     type: 'vaccine',
+//     placeholder: 'COVAXIN',
+//   },
+//   {
+//     type: 'vaccine',
+//     placeholder: 'COVISHIELD',
+//   },
+//   {
+//     type: 'age',
+//     placeholder: '45',
+//   },
+//   {
+//     type: 'age',
+//     placeholder: '18',
+//   },
+//   {
+//     type: 'fee',
+//     placeholder: 'Free',
+//   },
+//   {
+//     type: 'fee',
+//     placeholder: 'PAID',
+//   },
+// ];
+
 export const filterOptions = [
   {
-    type: 'vaccine',
-    placeholder: 'COVAXIN',
+    value: 'vaccine',
+    label: 'COVAXIN',
   },
   {
-    type: 'vaccine',
-    placeholder: 'COVISHIELD',
+    value: 'vaccine',
+    label: 'COVISHIELD',
   },
   {
-    type: 'age',
-    placeholder: '45',
+    value: 'min_age_limit',
+    label: 45,
   },
   {
-    type: 'age',
-    placeholder: '18',
+    value: 'min_age_limit',
+    label: 18,
   },
   {
-    type: 'fee',
-    placeholder: 'Free',
+    value: 'fee_type',
+    label: 'Free',
   },
   {
-    type: 'fee',
-    placeholder: 'PAID',
+    value: 'fee_type',
+    label: 'PAID',
   },
 ];
 
 export default function SlotsPage(props) {
   const router = useRouter();
-  const [states, setStates] = useState([]);
+  // const [states, setStates] = useState([]);
   const [filters, setFilters] = useState({
     age: '45',
     vaccine: 'COVAXIN',
     fee: 'FREE',
   });
+  const [filterOption, setFilterOption] = useState([]);
   const [activeSearchInputField, setActiveSearchInputField] = useState('');
   const [stateOption, setStateOption] = useState({ value: '', label: '' });
   const [districtOption, setDistrictOption] = useState({
@@ -59,7 +88,7 @@ export default function SlotsPage(props) {
     label: '',
   });
   const [pincode, setPincode] = useState(null);
-  const { fetchByCalender, slots } = useMainContext();
+  const { fetchByCalender, slots, states, getSlots } = useMainContext();
 
   // useEffect(() => {
   //   console.log('Pincode Change useeffect');
@@ -70,9 +99,12 @@ export default function SlotsPage(props) {
   //   return () => clearTimeout(timeout);
   // }, [pincode]);
 
+  // useEffect(() => {
+  //   setStates(JSON.parse(router.query.states));
+  // }, []);
   useEffect(() => {
-    setStates(JSON.parse(router.query.states));
-  }, []);
+    console.log('filter option', filterOption);
+  }, [filterOption]);
 
   const { stateID, districtID, districts, setStateId_fun, setDistrictId_fun } =
     useMainContext();
@@ -82,6 +114,7 @@ export default function SlotsPage(props) {
   }
 
   function handleMainButonClick(event) {
+    setPincode('');
     setActiveSearchInputField(event.target.getAttribute('name'));
   }
 
@@ -97,7 +130,13 @@ export default function SlotsPage(props) {
   }
 
   function onSearchButtonClick() {
-    fetchByCalender(pincode);
+    if (pincode) {
+      console.log('Pincode existe', 'filter options', filterOption);
+      getSlots(pincode, filterOption);
+    } else {
+      getSlots(null, filterOption);
+    }
+    // fetchByCalender(pincode);
   }
 
   function handleFilterButton(event) {
@@ -156,9 +195,6 @@ export default function SlotsPage(props) {
               onChange={onPincodeChange}
             />
           </div>
-          <div className="flex flex-row justify-center mx-auto mt-6">
-            <SearchButton onClick={onSearchButtonClick} />
-          </div>
         </>
       )}
       <div className="w-full mt-6 flex flex-row justify-start sm:justify-center ml-3  pl-4 sm:mx-auto">
@@ -175,27 +211,49 @@ export default function SlotsPage(props) {
       {/*    </div> */}
       {/*  ))} */}
       {/* </div> */}
-      <div className="w-3/4 flex justify-center flex-row flex-wrap mt-4 mb-3 mx-auto">
-        {filterOptions.map(option => (
-          <div className="px-1 py-2">
-            <FilterBreadCrumb
-              filterName={option.placeholder}
-              filterType={option.type}
-              onClick={handleFilterButton}
-            />
-          </div>
-        ))}
+      {/* <div className="w-3/4 flex justify-center flex-row flex-wrap mt-4 mb-3 mx-auto"> */}
+      {/*  {filterOptions.map(option => ( */}
+      {/*    <div className="px-1 py-2"> */}
+      {/*      <FilterBreadCrumb */}
+      {/*        filterName={option.placeholder} */}
+      {/*        filterType={option.type} */}
+      {/*        onClick={handleFilterButton} */}
+      {/*      /> */}
+      {/*    </div> */}
+      {/*  ))} */}
+      {/* </div> */}
+      <div className="w-full sm:w-6/12 mt-8 mx-auto px-4">
+        <Select
+          defaultValues={[{ value: '', label: 'Select' }]}
+          isMulti
+          options={filterOptions}
+          value={filterOption}
+          onChange={value => {
+            setFilterOption(value);
+          }}
+          placeholder="Filter"
+        />
+      </div>
+      <div className="flex flex-row justify-center mx-auto mt-6">
+        <SearchButton onClick={onSearchButtonClick} />
       </div>
       <div className="w-full">
-        {slots.map(slot => (
-          <SlotsListItem
-            date={slot.date}
-            place={slot.place}
-            slots={slot.slots}
-            pincode={slot.pincode}
-            districtID={slot.districtID}
-          />
-        ))}
+        {slots.map(slot => {
+          let counter = 0;
+          slots.forEach(slot => {
+            if (slot.slots === 0) counter += 1;
+          });
+          return counter === slots.length ? (
+            <div>No Slots</div>
+          ) : (
+            <SlotsListItem
+              date={slot.date}
+              place={slot.place}
+              slots={slot.slots}
+              pincode={slot.pincode}
+            />
+          );
+        })}
       </div>
       {/* <SlotsListItem /> */}
     </div>

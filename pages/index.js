@@ -56,6 +56,8 @@ export default function Home({ states }) {
     districtID,
     fetchSessionsByPincode,
     fetchByCalender,
+    getSlots,
+    setStates_fun,
   } = useMainContext();
   const [stateOption, setStateOption] = useState({ value: '', label: '' });
   const [districtOption, setDistrictOption] = useState({
@@ -77,13 +79,23 @@ export default function Home({ states }) {
   }
 
   function onSearchButtonClick() {
-    fetchByCalender(pincode || null);
-    router.push({
-      pathname: '/slots',
-      query: {
-        states: JSON.stringify(stateList),
-      },
-    });
+    if (pincode) {
+      getSlots(pincode, []);
+      router.push({
+        pathname: '/slots',
+        // query: {
+        //   states: JSON.stringify(stateList),
+        // },
+      });
+    } else if (districtID) {
+      getSlots(null, []);
+      router.push({
+        pathname: '/slots',
+        // query: {
+        //   states: JSON.stringify(stateList),
+        // },
+      });
+    }
   }
 
   function handleChange(value, type) {
@@ -131,6 +143,11 @@ export default function Home({ states }) {
       fetchByCalender();
     }
   }, [stateOption, districtOption]);
+
+  useEffect(() => {
+    setStates_fun(stateList);
+  }, [stateList]);
+
   if (!stateList) return <div>Loading...</div>;
   return (
     <div>
@@ -143,7 +160,7 @@ export default function Home({ states }) {
           <div className="w-10/12 text-4xl font-bold px-2">JabHunt</div>
         </div>
         <div className="text-sm mt-4">
-          Find Vaccination Centres in Your Area{' '}
+          Simple Interface to Find Covid Vaccines in your Area{' '}
         </div>
         <div className="flex flex-row justify-center mt-20 mx-auto w-full">
           <div className="px-2">

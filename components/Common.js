@@ -1,16 +1,15 @@
-export const MainButton = props => (
+export const MainButton = (props) => (
   <div
-    ass="ass"
     name={props.name}
     role="button"
-    onClick={event => props.onClick(event)}
+    onClick={(event) => props.onClick(event)}
     className="text-md  font-light text-gray-100 tracking-wide border-1 bg-gradient-to-r from-red-grad-dark to-red-grad-light shadow-md border-1 py-1 px-4 overflow-hidden  rounded-sm"
   >
     {props.name}
   </div>
 );
 
-export const SearchInput = props => (
+export const SearchInput = (props) => (
   <div
     role="button"
     onChange={props.onChange}
@@ -25,7 +24,7 @@ export const SearchInput = props => (
   </div>
 );
 
-export const SearchButton = props => (
+export const SearchButton = (props) => (
   <div
     role="button"
     onClick={props.onClick}
@@ -35,7 +34,7 @@ export const SearchButton = props => (
   </div>
 );
 
-export const FilterBreadCrumb = props => (
+export const FilterBreadCrumb = (props) => (
   <div
     data-filtertype={props.filterType}
     role="button"

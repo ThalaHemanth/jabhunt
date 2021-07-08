@@ -65,7 +65,13 @@ export default function SlotCard(props) {
               : 'bg-green-600'
           } h-2/6 p-2 text-xs text-center`}
         >
-          <a href="#">Book On CoWin</a>
+          <a
+            href="https://selfregistration.cowin.gov.in/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Book On CoWin
+          </a>
         </div>
       </div>
     </div>
